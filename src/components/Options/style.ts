@@ -7,10 +7,16 @@ export const StyledOptions = styled.div`
         color: var(--color-grey100);
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 6px;
         padding: 1rem;
-        cursor: pointer;
         transition: 0.5s;
+
+        & > li {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            cursor: pointer;            
+        }
     }
     
 `

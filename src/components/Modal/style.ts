@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const StyledUpdateModal = styled.div`
     position: absolute;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #020129e6;
     top: 0;
     left: 0;
@@ -17,6 +17,7 @@ export const StyledUpdateModal = styled.div`
         display: flex;
         flex-direction: column;
         gap: 16px;
+        width: 80%;
         
         & > div {
             display: flex;

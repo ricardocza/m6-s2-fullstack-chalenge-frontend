@@ -11,7 +11,7 @@ export const GlobalStyles = createGlobalStyle`
         --color-grey200: #B3C0BF;
         --color-grey100: #F8F9FA;        
         --green: #1AD042;
-        --red: #b10909;
+        --error: #590606;
         --b-radius8: 8px;
         --b-radius16: 16px;
         --b-radius20: 20px;
@@ -55,5 +55,11 @@ export const GlobalStyles = createGlobalStyle`
         color: var(--color-grey100);
         font-size: 20px;
         font-weight: 400;
+    }
+    div + span {
+        color: var(--error);
+    }
+    .formError {
+        border: 2px solid var(--error);
     }
 `

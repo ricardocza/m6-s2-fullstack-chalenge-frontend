@@ -15,11 +15,11 @@ export const StyledInput = styled.div`
     & > input {
         border-radius: 12px;
         box-shadow: var(--box-shadow);
-        height: 40px;
-        border: 1px solid var(--color-grey200);
+        height: 40px;        
         background-color: var(--color-grey200);
         padding: 0 1rem;
         font-size: 16px;
+        outline: none;
     }
 
 `
