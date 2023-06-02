@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const createClientSchema = z.object({
-    name: z.string().max(50),
-    email: z.string().max(100),
+    name: z.string().min(5).max(50),
+    email: z.string().min(5).max(100),
     phone: z.string().length(11),
     
 })

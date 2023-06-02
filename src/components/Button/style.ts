@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const StyledButton = styled.div`
     margin-top: 20px;
     transition: 0.5s;
-    & > button {
+    & > button, a {
         width: 100%;
         height: 40px;
         border-radius: var(--b-radius8);

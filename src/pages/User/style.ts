@@ -35,6 +35,29 @@ export const StyledUser = styled.div`
                 color: #153b45;
             }
         }
+        a {
+            display: flex;
+            align-items: center;
+            margin: 0 auto;
+            justify-content: center;
+            width: 50%;
+            height: 40px;
+            border-radius: var(--b-radius8);
+            border: none;
+            background-color: var(--color-grey300);
+            color: #153b45;
+
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+
+            &:active {
+                transform: scale(0.98);
+                transition: 0.5s;
+            }
+        }
+
+        
     }
     
 `

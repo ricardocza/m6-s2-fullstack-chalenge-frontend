@@ -18,6 +18,7 @@ export const StyledHeader =styled.header`
 
     & > a {
         border: none;
+        box-shadow: none;
         width: 50px;
         height: 50px;
         background-color: transparent;

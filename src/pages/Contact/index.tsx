@@ -4,15 +4,22 @@ import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { Hero } from "../../components/Hero";
 import { InputField } from "../../components/InputField";
-import { StyledDashboard } from "./style";
+import { StyledContact } from "./style";
 import { Options } from "../../components/Options";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../../services/api";
+import { Card } from "../../components/Cards";
 
-export const Dashboard = () => {
-  const [client, setClient] = useState(false as boolean);
-  const [contact, setContact] = useState(false as boolean);
+interface iContact {
+  name: string;
+  email: string;
+  phone: string;
+  id: string;
+}
+
+export const Contact = () => {
+  const [contacts, setContacts] = useState([] as iContact[]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,12 +27,14 @@ export const Dashboard = () => {
 
     const getUsers = async () => {
       try {
-        const response = await api.get("/user", {
+        const response = await api.get("/contacts", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
+
+        setContacts(response.data);
       } catch (error: any) {
         toast.error("Ocorreu um erro, faça o login novamente", {
           type: "error",
@@ -47,19 +56,33 @@ export const Dashboard = () => {
   }, []);
 
   return (
-    <StyledDashboard>
+    <StyledContact>
       <Header />
       <main>
         <Hero />
         <section>
-          <h2>Olá, Fulano</h2>
+          <h2>Contatos</h2>
+          <ul>
+            {contacts.length === 0 ? (
+              <h2>Não há clientes cadastrados para esse usuário</h2>
+            ) : (
+              contacts.map((element: iContact) => (
+                <Card
+                  key={element.id}
+                  id={element.id}
+                  name={element.name}
+                  email={element.email}
+                  phone={element.phone}
+                />
+              ))
+            )}
+          </ul>
           <div>
-            <Link to={"/clients"}>Opções de clientes</Link>
-            <Link to={"/contact"}>Opções de contato</Link>
+            <Link to={"/dashboard"}>Voltar</Link>
           </div>
         </section>
       </main>
       <Footer />
-    </StyledDashboard>
+    </StyledContact>
   );
 };

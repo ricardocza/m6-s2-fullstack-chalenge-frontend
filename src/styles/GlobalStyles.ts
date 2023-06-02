@@ -56,10 +56,16 @@ export const GlobalStyles = createGlobalStyle`
         font-size: 20px;
         font-weight: 400;
     }
+    h3 {
+        color: var(--color-grey100);
+        font-size: 16px;
+        font-weight: 400;
+    }
     div + span {
         color: var(--error);
     }
     .formError {
         border: 2px solid var(--error);
     }
+
 `

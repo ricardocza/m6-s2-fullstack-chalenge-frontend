@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
-export const StyledUpdateModal = styled.div`
+export const StyledModal = styled.div`
     position: absolute;
     width: 100vw;
     min-height: 100vh;
     background-color: #020129e6;
-    top: 0;
+    top: -10px;
     left: 0;
     overflow: auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: flex-start;    
-    padding-top: 40px;
+    padding: 40px;
     
     & > form {
         display: flex;

@@ -5,6 +5,7 @@ export const StyledInput = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 10px;
 
     & > label {
         color: var(--color-grey100);
