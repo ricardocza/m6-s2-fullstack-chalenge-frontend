@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Dashboard } from "./pages/Dashboard";
-import { User } from "./pages/User";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { Update } from "./pages/Update";
@@ -32,7 +31,6 @@ function App() {
         <Route path="/clients/:id" element={<Client />} />
         <Route path="/clients" element={<Clients />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/dashboard/user" element={<User />} />
         <Route path="/dashboard/user/update" element={<Update />} />
       </Routes>
     </>

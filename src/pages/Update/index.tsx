@@ -109,10 +109,10 @@ export const Update = () => {
             field="password"
             type="password"
             label="Senha"
-            placehoder="Insira sua senha"
+            placehoder="Atualize sua senha"
           />
           <div>
-            <Link to={"/dashboard/user"}>Voltar</Link>
+            <Link to={"/dashboard"}>Voltar</Link>
           </div>
         </section>
       </main>

@@ -15,22 +15,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { UserContext } from "../../Context/UserContext";
-import { createClientSchema } from "../../schemas/clientSchema";
+import { createClientSchema, iClient, iCreateClient } from "../../schemas/clientSchemas";
+import { RequestsContext } from "../../Context/RequestsContext";
 
-interface iClient {
-  name: string;
-  email: string;
-  phone: string;
-  id: string;
-}
 
-type iSubmitClient = z.infer<typeof createClientSchema>;
 
 export const Clients = () => {
   const token = localStorage.getItem("@TOKEN");
   const [clients, setClients] = useState([] as iClient[]);
   const [modal, setModal] = useState(false);
-
+  const {createClient} = useContext(RequestsContext)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,23 +61,17 @@ export const Clients = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<iSubmitClient>({
+  } = useForm<iCreateClient>({
     resolver: zodResolver(createClientSchema),
   });
-  const submitClient: SubmitHandler<iSubmitClient> = async (data) => {
-    try {
-      const response = await api.post("/clients", data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setModal(false);
-      const toaster = toast.success("Cliente cadastrado!");
-    } catch (error: any) {
-      console.log(error.response.data.message);
-      const toaster = toast.error(error.response.data.message);
-    }
+
+  const submitClient: SubmitHandler<iCreateClient> = async (data) => {
+      const response = await createClient(data)
+      if(response) {
+        const toaster = toast.success("Cliente cadastrado!");
+        setModal(false);
+      }
+          
   };
 
   const navigateToClient = (id: string) => {

@@ -9,8 +9,10 @@ import { Options } from "../../components/Options";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../../services/api";
+import { iUser } from "../Update";
 
 export const Dashboard = () => {
+  const [user, setUser] = useState({} as iUser)
   const [client, setClient] = useState(false as boolean);
   const [contact, setContact] = useState(false as boolean);
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export const Dashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        setUser(response.data[0])
       } catch (error: any) {
         toast.error("Ocorreu um erro, faça o login novamente", {
           type: "error",
@@ -46,16 +49,21 @@ export const Dashboard = () => {
     getUsers();
   }, []);
 
+  const handleLogout = () => {
+    localStorage.clear();    
+  };
+
   return (
     <StyledDashboard>
       <Header />
       <main>
         <Hero />
         <section>
-          <h2>Olá, Fulano</h2>
+          <h2>Olá, {user.firstName}</h2>
           <div>
             <Link to={"/clients"}>Opções de clientes</Link>
-            <Link to={"/contact"}>Opções de contato</Link>
+            <Link to={"/dashboard/user/update"}>Atualizar usuário</Link>
+            <Link onClick={handleLogout} to={"/"}>Logout</Link>
           </div>
         </section>
       </main>

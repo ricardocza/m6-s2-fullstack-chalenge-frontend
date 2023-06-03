@@ -15,7 +15,9 @@ position: relative;
             margin-top: 20px;
 
             & > a {
-                padding: 1rem 2rem;
+                width: 70%;
+                padding: 1rem 0;
+                text-align: center;
                 border-radius: var(--b-radius8);
                 border: none;
                 background-color: var(--bg-main);

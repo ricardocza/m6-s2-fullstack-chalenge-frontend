@@ -12,15 +12,6 @@ export const Header = () => {
         <div>
             <img src={logo} alt="" />
         </div>
-        <h1>Desafio Full Stack</h1>
-        {
-            userLoggedIn
-            ?
-            <Link to={'/dashboard/user'}>
-                <FaUserAlt/>
-            </Link>
-            :
-            <></>
-        }
+        <h1>Desafio Full Stack</h1>        
     </StyledHeader>
 }

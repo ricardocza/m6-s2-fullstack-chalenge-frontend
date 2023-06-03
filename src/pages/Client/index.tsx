@@ -1,11 +1,20 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { StyledClient } from "./style";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../../services/api";
 import { Card } from "../../components/Cards";
 import { FaPlusCircle } from "react-icons/fa";
 import { Button } from "../../components/Button";
+import { Header } from "../../components/Header";
+import { Footer } from "../../components/Footer";
+import { Modal } from "../../components/Modal";
+import { InputField } from "../../components/InputField";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { createContactSchema } from "../../schemas/contactSchemas";
+import { RequestsContext } from "../../Context/RequestsContext";
+import { iCreateClient } from "../../schemas/clientSchemas";
 
 interface iClient {
   name: string;
@@ -28,9 +37,11 @@ interface RouteParams {
 
 export const Client = () => {
   const { id } = useParams();
+  const [modal, setModal] = useState(false as boolean)
   const [client, setClient] = useState({} as iClient | null);
   const [updater, setUpdater] = useState(false);
   const navigate = useNavigate();
+  const {deleteClient, createContact} = useContext(RequestsContext)
 
   useEffect(() => {
     const token = localStorage.getItem("@TOKEN");
@@ -62,138 +73,120 @@ export const Client = () => {
     };
 
     getClients();
-  }, [updater]);
+  }, [updater, modal]);
 
-  const deleteClient = async (id: string) => {
-    const toaster = toast.loading("Removendo cliente...");
-    const token = localStorage.getItem("@TOKEN");
-    try {
-      const response = await api.delete(`/clients/${id}/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      toast.update(toaster, {
-        render: "Cadastro removido com sucesso!",
-        type: "success",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      navigate("/clients");
-    } catch (error: any) {
-      console.log(error.response.data.message);
-      toast.update(toaster, {
-        render: error.response.data.message,
-        type: "error",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<iContact>({
+    resolver: zodResolver(createContactSchema),
+  });
+  
+  const submitContact: SubmitHandler<iCreateClient> = async (data) => {
+      const response = await createContact(data, client?.id!)
+      if (response) {
+        const toaster = toast.success("Contato cadastrado!");
+        setModal(false);
+
+      }
+      
   };
 
-  const deleteContact = async (id: string) => {
-    const token = localStorage.getItem("@TOKEN");
-    const toaster = toast.loading("Removendo contato...");
+  const deleteContact = (id: string) => {}
 
-    try {
-      const response = await api.delete(`/contacts/${id}/`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      toast.update(toaster, {
-        render: "Cadastro realizado com sucesso!",
-        type: "success",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      setUpdater(!updater);
-    } catch (error: any) {
-      console.log(error.response.data.message);
-      toast.update(toaster, {
-        render: error.response.data.message,
-        type: "error",
-        isLoading: false,
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-  };
 
   return (
     <>
       {client?.phone ? (
         <StyledClient>
-          <h2>ID: {id}</h2>
-          <h2>Cliente: {client.name}</h2>
-          <h2>Email: {client.email}</h2>
-          <h2>
-            Telefone:{" "}
-            {`(${client.phone.substring(0, 2)}) ${client.phone.substring(2)}`}
-          </h2>
+          <Header />
+          <main>
+            <h2>Cliente: {client.name}</h2>
+            <h2>ID: {id}</h2>
+            <h2>Email: {client.email}</h2>
+            <h2>
+              Telefone:{" "}
+              {`(${client.phone.substring(0, 2)}) ${client.phone.substring(2)}`}
+            </h2>
 
-          <div>
-            <div className="contacts">
-              <h2>Clientes</h2>
-              <FaPlusCircle />
+            <div>
+              <div className="contacts">
+                <h2>Contatos</h2>
+                <FaPlusCircle onClick={() => setModal(true)} />
+              </div>
+              {client.contact.length === 0 ? (
+                <h2>Não há contatos cadastrados para esse cliente</h2>
+              ) : (
+                client.contact.map((element: iContact) => (
+                  <>
+                    <Card
+                      key={element.id}
+                      id={element.id}
+                      name={element.name}
+                      email={element.email}
+                      phone={element.phone}
+                    >
+                      <button onClick={() => deleteContact(element.id)}>
+                        Excluir Contato
+                      </button>
+                    </Card>
+                  </>
+                ))
+              )}
             </div>
-            {client.contact.length === 0 ? (
-              <h2>Não há contatos cadastrados para esse cliente</h2>
-            ) : (
-              client.contact.map((element: iContact) => (
-                <>
-                  <Card
-                    key={element.id}
-                    id={element.id}
-                    name={element.name}
-                    email={element.email}
-                    phone={element.phone}
-                  >
-                    <button onClick={() => deleteContact(element.id)}>
-                      Excluir Contato
-                    </button>
-                  </Card>
-                </>
-              ))
-            )}
-          </div>
-          <div className="buttons">
-            <Button
-              onClick={() => deleteClient(id!)}
-              text="Excluir Cliente"
-              type="button"
-            />
-            <Link to={"/clients"}>Voltar</Link>
-          </div>
+            <div className="buttons">
+              <Button
+                onClick={() => deleteClient(id!)}
+                text="Excluir Cliente"
+                type="button"
+              />
+              <Link to={"/clients"}>Voltar</Link>
+            </div>
+          </main>
+          {modal === true ? (
+        <form onSubmit={handleSubmit(submitContact)}>
+          <InputField
+            className={errors.name && "formError"}
+            placehoder="Digite nome do contato"
+            label="Nome"
+            type="text"
+            register={register("name")}
+          />
+          {errors.name && <span>{errors.name.message}</span>}
+          <InputField
+            className={errors.email && "formError"}
+            placehoder="Digite o email do contato"
+            label="Email"
+            type="text"
+            register={register("email")}
+          />
+          {errors.email && <span>{errors.email.message}</span>}
+          <InputField
+            className={errors.email && "formError"}
+            placehoder="Digite o telefone do contato"
+            label="Telefone"
+            type="text"
+            register={register("phone")}
+          />
+          {errors.phone && <span>{errors.phone.message}</span>}
+
+          <Button type="submit" text="Criar contato" />
+          <Button
+            type="button"
+            text="Cancelar"
+            onClick={() => setModal(false)}
+          />
+        </form>
+      ) : (
+        <></>
+      )}
         </StyledClient>
       ) : (
         <></>
       )}
+      <Footer/>
+      
     </>
   );
 };
