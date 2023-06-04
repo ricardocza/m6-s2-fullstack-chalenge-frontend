@@ -24,8 +24,9 @@ export const Clients = () => {
   const token = localStorage.getItem("@TOKEN");
   const [clients, setClients] = useState([] as iClient[]);
   const [modal, setModal] = useState(false);
-  const {createClient} = useContext(RequestsContext)
+  const {createClient, deleteClient} = useContext(RequestsContext)
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const getClients = async () => {
@@ -101,6 +102,7 @@ export const Clients = () => {
                   name={element.name}
                   phone={element.phone}
                   email={element.email}
+                 
                 />
               ))
             )}

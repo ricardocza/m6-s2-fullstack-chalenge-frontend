@@ -8,8 +8,12 @@ import { useNavigate } from "react-router-dom";
 
 interface iRequestsContext {
     createClient:(data: iSubmitClient) => Promise<boolean>
+    updateClient: (object: any, id: string) => Promise<boolean | string>;
     deleteClient: (id: string) => Promise<void>
     createContact:(data: iSubmitClient, clientId: string) => Promise<boolean | string>
+    updateContact: (object: any, id: string) => Promise<boolean | string>;
+    deleteContact: (id: string) => Promise<void>
+
 }
 
 interface iRequestProps {
@@ -38,6 +42,22 @@ export const RequestsProvider = ({children}: iRequestProps) => {
           const toaster = toast.error(error.response.data.message);
           return false
 
+        }
+      };
+
+      const updateClient = async (data: any, clientId: string) => {
+        const token = localStorage.getItem("@TOKEN");
+        try {
+          const response = await api.patch(`/clients/${clientId}`, data, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          return true;
+        } catch (error: any) {
+          console.log(Object.values(error.response.data.message)[0]);
+          return String(Object.values(error.response.data.message)[0]);
         }
       };
       
@@ -88,11 +108,62 @@ export const RequestsProvider = ({children}: iRequestProps) => {
   
           }
         };
+        
+        const updateContact = async (data: any, contactId: string) => {
+          const token = localStorage.getItem("@TOKEN");
+          try {
+            const response = await api.patch(`/contacts/${contactId}`, data, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            return true;
+          } catch (error: any) {
+            console.log(Object.values(error.response.data.message)[0]);
+            return String(Object.values(error.response.data.message)[0]);
+          }
+        };
+
+        const deleteContact = async (id: string): Promise<void> => {
+          const toaster = toast.loading("Removendo cliente...");
+          const token = localStorage.getItem("@TOKEN");
+          try {
+            const response = await api.delete(`/contacts/${id}/`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            toast.update(toaster, {
+              render: "Contato removido com sucesso!",
+              type: "success",
+              isLoading: false,
+              position: "top-right",
+              autoClose: 2500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            navigate(-1);
+          } catch (error: any) {
+            const toaster = toast.error(error.response.data.message);
+            console.log(error.response.data.message);
+            
+          }
+          
+        };
+
     return (
         <RequestsContext.Provider value={{
             createClient,
+            updateClient,
             deleteClient,
-            createContact
+            createContact,
+            updateContact,
+            deleteContact
         }}>
             {children}
         </RequestsContext.Provider>

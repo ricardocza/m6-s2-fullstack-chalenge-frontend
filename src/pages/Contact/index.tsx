@@ -55,6 +55,8 @@ export const Contact = () => {
     getUsers();
   }, []);
 
+  const deleteContact = async (id: string): Promise<void> => {}
+
   return (
     <StyledContact>
       <Header />
@@ -73,6 +75,7 @@ export const Contact = () => {
                   name={element.name}
                   email={element.email}
                   phone={element.phone}
+                  
                 />
               ))
             )}

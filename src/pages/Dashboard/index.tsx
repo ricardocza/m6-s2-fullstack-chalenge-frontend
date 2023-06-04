@@ -9,7 +9,7 @@ import { Options } from "../../components/Options";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../../services/api";
-import { iUser } from "../Update";
+import { iUser } from "../../schemas/userSchemas";
 
 export const Dashboard = () => {
   const [user, setUser] = useState({} as iUser)
@@ -62,7 +62,7 @@ export const Dashboard = () => {
           <h2>Olá, {user.firstName}</h2>
           <div>
             <Link to={"/clients"}>Opções de clientes</Link>
-            <Link to={"/dashboard/user/update"}>Atualizar usuário</Link>
+            <Link to={"/user/update"}>Atualizar usuário</Link>
             <Link onClick={handleLogout} to={"/"}>Logout</Link>
           </div>
         </section>

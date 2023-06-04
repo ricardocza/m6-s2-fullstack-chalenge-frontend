@@ -3,10 +3,10 @@ import { ChangeEvent, useContext, useState } from "react";
 import { TiEdit } from "react-icons/ti";
 import { TiTickOutline } from "react-icons/ti";
 import { TiCancelOutline } from "react-icons/ti";
-import { iUser } from "../../pages/Update";
 import { UserContext } from "../../Context/UserContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { iUser } from "../../schemas/userSchemas";
 
 interface InputProps {
   label: string;
@@ -14,7 +14,9 @@ interface InputProps {
   placehoder: string;
   value?: string;
   userData?: iUser;
-  field: "firstName" | "lastName" | "email" | "password";
+  field: "firstName" | "lastName" | "email" | "password" | "phone" | "name";
+  patchFunction: (data: any, id: string) => Promise<boolean | string>
+  id?: string
 }
 
 export const UpdateField = ({
@@ -24,9 +26,11 @@ export const UpdateField = ({
   value,
   userData,
   field,
+  patchFunction,
+  id
 }: InputProps) => {
   const [edit, setEdit] = useState(false as boolean);
-  const [inputValue, setInputValue] = useState(value as string | undefined);
+  const [inputValue, setInputValue] = useState(value as string);
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -35,19 +39,24 @@ export const UpdateField = ({
   };
 
   const handleSave = async () => {
-    if (inputValue === "" || value === inputValue) {
+    
+    if (inputValue === "" || inputValue === undefined) {
       setEdit(false);
     } else {
       const toaster = toast.loading("Atualizando, aguarde!");
       const response =
         field === "firstName"
-          ? await updateUser({ firstName: inputValue })
-          : field === "lastName"
-          ? await updateUser({ lastName: inputValue })
-          : field === "email"
-          ? await updateUser({ email: inputValue })
-          : await updateUser({ password: inputValue });
-      if (response) {
+        ? await patchFunction({ firstName: inputValue }, id!)
+        : field === "name"
+        ? await patchFunction({ name: inputValue }, id!)
+        : field === "lastName"
+        ? await patchFunction({ lastName: inputValue }, id!)
+        : field === "email"
+        ? await patchFunction({ email: inputValue }, id!)
+        : field === "phone"
+        ? await patchFunction({ phone: inputValue }, id!)
+        : await patchFunction({ password: inputValue }, id!);
+      if (response === true) {
         toast.update(toaster, {
           render: "Cadastro atualizado com sucesso!",
           type: "success",
@@ -63,7 +72,7 @@ export const UpdateField = ({
         setEdit(false);
       } else {
         toast.update(toaster, {
-          render: "Algo deu errado, realize novamente o login",
+          render: response,
           type: "error",
           isLoading: false,
           position: "top-right",
@@ -74,15 +83,16 @@ export const UpdateField = ({
           draggable: true,
           progress: undefined,
         });
-        localStorage.clear();
-        navigate("/");
+
       }
     }
   };
-
+  
   return (
     <StyledUpdateField>
-      <label htmlFor="">{label}</label>
+      {
+        value ? <>
+<label htmlFor="">{label}</label>
       <div>
         <input
           onChange={handleInput}
@@ -101,6 +111,12 @@ export const UpdateField = ({
           <TiEdit onClick={() => setEdit(true)} />
         )}
       </div>
+      </>
+
+          :
+          null
+      }
+
     </StyledUpdateField>
   );
 };

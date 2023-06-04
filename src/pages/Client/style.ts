@@ -23,12 +23,12 @@ export const StyledClient = styled.div`
         & > .buttons {
             display: flex;
             flex-direction: column;
-            gap: 20px;
             
             & > a {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                margin-top: 20px;
                 width: 100%;
                 height: 40px;
                 border-radius: var(--b-radius8);

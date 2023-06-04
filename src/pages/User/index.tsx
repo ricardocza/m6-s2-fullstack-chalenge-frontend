@@ -64,10 +64,6 @@ export const User = () => {
     setUpdateModal(true);
   };
 
-  const submitUpdate: SubmitHandler<iUpdateForm> = (data) => {
-    console.log(data);
-  };
-
   return (
     <StyledUser>
       <Header />

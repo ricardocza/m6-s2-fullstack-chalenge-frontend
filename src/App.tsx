@@ -4,14 +4,15 @@ import { Register } from "./pages/Register";
 import { Dashboard } from "./pages/Dashboard";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { Update } from "./pages/Update";
+import { UpdateUser } from "./pages/UpdateUser";
 import { Clients } from "./pages/Clients";
-import { Contact } from "./pages/Contact";
 import { Client } from "./pages/Client";
+import { UpdateContact } from "./pages/UpdateContact";
+import { UpdateClient } from "./pages/UpdateClient";
 
 function App() {
   return (
-    <>
+    <div className="container">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -30,10 +31,11 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/clients/:id" element={<Client />} />
         <Route path="/clients" element={<Clients />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/dashboard/user/update" element={<Update />} />
+        <Route path="/user/update" element={<UpdateUser/>} />
+        <Route path="/client/update/:id" element={<UpdateClient/>} />
+        <Route path="/contact/update/:id" element={<UpdateContact/>} />
       </Routes>
-    </>
+    </div>
   );
 }
 

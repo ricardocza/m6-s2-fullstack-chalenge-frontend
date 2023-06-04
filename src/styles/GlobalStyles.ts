@@ -67,5 +67,10 @@ export const GlobalStyles = createGlobalStyle`
     .formError {
         border: 2px solid var(--error);
     }
+    .container {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
 `

@@ -93,7 +93,7 @@ export const Client = () => {
       
   };
 
-  const deleteContact = (id: string) => {}
+  const deleteContact = async (id: string): Promise<void> => {}
 
 
   return (
@@ -125,17 +125,15 @@ export const Client = () => {
                       id={element.id}
                       name={element.name}
                       email={element.email}
-                      phone={element.phone}
-                    >
-                      <button onClick={() => deleteContact(element.id)}>
-                        Excluir Contato
-                      </button>
-                    </Card>
+                      phone={element.phone} 
+                      onClick={() => navigate(`/contact/update/${element.id}`)}
+                    />                      
                   </>
                 ))
               )}
             </div>
             <div className="buttons">
+              <Link to={`/client/update/${id}`}>Atualizar Cliente</Link>
               <Button
                 onClick={() => deleteClient(id!)}
                 text="Excluir Cliente"
